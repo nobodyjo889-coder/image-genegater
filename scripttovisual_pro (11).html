@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScriptToVisual Pro - AI Storyboard & Video Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #090d16; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #334155; }
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .animate-pulse-subtle { animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-full flex flex-col overflow-x-hidden selection:bg-indigo-500 selection:text-white">
+
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-xl border-b border-slate-800 px-6 lg:px-12 py-3.5 flex items-center justify-between shrink-0 shadow-md">
+        <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="app.showPage('landing')">
+            <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 text-white p-2.5 rounded-2xl shadow-lg shadow-indigo-500/30">
+                <i class="fa-solid fa-clapperboard text-lg"></i>
+            </div>
+            <div>
+                <h1 class="font-extrabold text-base lg:text-lg tracking-tight bg-gradient-to-r from-indigo-400 via-violet-300 to-pink-400 bg-clip-text text-transparent">ScriptToVisual Pro</h1>
+                <p class="text-[10px] text-slate-400 font-medium">AI Visual Storyboard & Live FX Engine</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3">
+            <button onclick="app.openApiKeyModal()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700 transition flex items-center space-x-2">
+                <i class="fa-solid fa-key text-amber-400"></i>
+                <span id="apiKeyStatusText">API Key (Optional)</span>
+            </button>
+            <button onclick="app.showPage('studio')" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-semibold rounded-2xl shadow-lg shadow-indigo-600/30 transition flex items-center space-x-2">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Launch Studio App</span>
+            </button>
+        </div>
+    </header>
+
+    <div id="appContainer" class="flex-1 flex flex-col overflow-hidden relative">
+        
+        <!-- LANDING PAGE -->
+        <div id="landingPage" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
+            <section class="relative px-6 lg:px-24 py-16 lg:py-28 flex flex-col items-center text-center overflow-hidden">
+                <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.2),rgba(255,255,255,0))]"></div>
+                <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+                <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 mb-6 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                    <span>Multi-Modal AI & Live Canvas FX Engine</span>
+                </div>
+
+                <h1 class="text-4xl lg:text-7xl font-extrabold tracking-tight max-w-5xl leading-tight text-white mb-6">
+                    Transform Any Script into <span class="bg-gradient-to-r from-indigo-400 via-violet-400 to-pink-400 bg-clip-text text-transparent">AI Video Storyboards</span> Instantly
+                </h1>
+
+                <p class="text-sm lg:text-lg text-slate-400 max-w-2xl mb-10 leading-relaxed">
+                    Classify scripts into narrative sections, generate high-definition AI character visuals, generate voiceovers, and export full WebM movie files.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4 w-full justify-center">
+                    <button onclick="app.showPage('studio')" class="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm rounded-2xl shadow-xl shadow-indigo-600/30 transition flex items-center justify-center space-x-3">
+                        <i class="fa-solid fa-play text-xs"></i>
+                        <span>Get Started Free in Studio</span>
+                    </button>
+                    <button onclick="app.loadSampleAndStudio()" class="w-full sm:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-slate-300 font-medium text-sm rounded-2xl border border-slate-800 transition flex items-center justify-center space-x-3">
+                        <i class="fa-solid fa-bolt text-amber-400 text-xs"></i>
+                        <span>Try Sample Script</span>
+                    </button>
+                </div>
+            </section>
+
+            <footer class="mt-auto border-t border-slate-900 py-6 px-6 text-center text-xs text-slate-500">
+                ScriptToVisual Pro &copy; 2026. Powered by AI Image Generation & Live Canvas FX Engine.
+            </footer>
+        </div>
+
+        <!-- STUDIO PAGE -->
+        <div id="studioPage" class="flex-1 flex flex-col md:flex-row overflow-hidden hidden">
+            
+            <!-- LEFT COLUMN: SCRIPT INPUT & SETTINGS -->
+            <section class="w-full md:w-1/2 border-b md:border-b-0 md:border-r border-slate-800 flex flex-col bg-slate-900/50 overflow-hidden">
+                <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900 flex-wrap gap-2 shrink-0">
+                    <div class="flex items-center space-x-3">
+                        <button onclick="app.showPage('landing')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-lg border border-slate-700 transition flex items-center space-x-1.5" title="Back to Home Page">
+                            <i class="fa-solid fa-arrow-left text-indigo-400"></i>
+                            <span>Home</span>
+                        </button>
+                        <h2 class="text-xs lg:text-sm font-semibold text-slate-300 flex items-center space-x-2">
+                            <i class="fa-solid fa-file-lines text-indigo-400"></i>
+                            <span>1. Script Input & Settings</span>
+                        </h2>
+                    </div>
+                    <div class="flex items-center space-x-3 flex-wrap gap-2">
+                        <div class="flex items-center space-x-1.5">
+                            <label class="text-[11px] text-slate-400 font-medium">Style:</label>
+                            <select id="artStyleSelect" onchange="app.updateArtStyle(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium">
+                                <option value="anime style, cel shaded, vibrant digital art">Anime (2D Cel)</option>
+                                <option value="hyper-realistic cinematic photography, dramatic lighting, 8k photo">Realism (Photographic)</option>
+                                <option value="3D Pixar CGI animation style, volumetric lighting, rich textures">Pixar 3D CGI</option>
+                                <option value="vintage comic book graphic novel illustration, bold ink lines">Comic Book</option>
+                                <option value="cyberpunk neon dystopian style, high contrast, glowing lights">Cyberpunk Neon</option>
+                                <option value="classic oil painting masterpiece style, expressive brushstrokes">Oil Painting</option>
+                                <option value="dark fantasy atmospheric digital concept art, cinematic">Dark Fantasy</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <label class="text-[11px] text-slate-400 font-medium">Voice:</label>
+                            <select id="voiceName" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <option value="Kore" data-gender="female">Kore (Female)</option>
+                                <option value="Puck" data-gender="male">Puck (Male)</option>
+                                <option value="Zephyr" data-gender="female">Zephyr (Female Soft)</option>
+                                <option value="Fenrir" data-gender="male">Fenrir (Male Deep)</option>
+                                <option value="Aoede" data-gender="female">Aoede (Female Narrator)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 p-5 flex flex-col space-y-5 overflow-y-auto custom-scrollbar">
+                    
+                    <!-- Character Ref Box -->
+                    <div class="bg-slate-900 border border-indigo-500/30 rounded-2xl p-4 flex flex-col space-y-3 shrink-0 shadow-lg">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center space-x-2">
+                                <i class="fa-solid fa-user-shield text-indigo-400"></i>
+                                <span>Character & Visual Reference</span>
+                            </h3>
+                            <span class="text-[10px] text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">Optional Style Guide</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400">Upload a face image or enter character physical traits to ensure prompt consistency.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="relative bg-slate-950 border border-slate-800 rounded-xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:border-indigo-500/50 transition group min-h-[90px] overflow-hidden" onclick="document.getElementById('charImageUpload').click()">
+                                <input type="file" id="charImageUpload" accept="image/*" class="hidden" onchange="app.handleCharImageUpload(event)">
+                                <div id="charImagePreviewContainer" class="w-full h-full flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-cloud-arrow-up text-indigo-400 text-lg mb-1 group-hover:scale-110 transition"></i>
+                                    <span class="text-xs font-medium text-slate-300">Upload Ref</span>
+                                    <span class="text-[9px] text-slate-500">PNG, JPG</span>
+                                </div>
+                            </div>
+                            <div class="md:col-span-2 flex flex-col">
+                                <textarea id="charPhysicalDesc" rows="3" class="w-full flex-1 bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono resize-none leading-relaxed" placeholder="Describe physical traits (e.g. 'Futuristic protagonist with glowing cyan tactical jacket, short silver hair')..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Script Input Box -->
+                    <div class="flex-1 flex flex-col min-h-[250px]">
+                        <div class="flex justify-between items-center mb-2 shrink-0 flex-wrap gap-2">
+                            <label for="scriptInput" class="block text-xs font-medium text-slate-400">Paste script, story, or dialogue:</label>
+                            
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-semibold text-indigo-300 flex items-center space-x-1">
+                                    <i class="fa-solid fa-sliders"></i>
+                                    <span>Sections:</span>
+                                </span>
+                                <select id="manualSceneCount" class="bg-slate-800 border border-indigo-500/40 text-indigo-200 text-xs rounded-xl px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-bold">
+                                    <option value="3" selected>3 Sections</option>
+                                    <option value="5">5 Sections</option>
+                                    <option value="10">10 Sections</option>
+                                    <option value="15">15 Sections</option>
+                                    <option value="20">20 Sections</option>
+                                </select>
+                            </div>
+                        </div>
+                        <textarea id="scriptInput" oninput="app.updateCharCount()" class="w-full flex-1 bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs lg:text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono resize-none custom-scrollbar leading-relaxed min-h-[220px]" placeholder="Paste your script here..."></textarea>
+                        <div class="flex justify-between items-center mt-1.5 px-1">
+                            <span class="text-[10px] text-slate-500 italic">Script will be structured into exact sections automatically.</span>
+                            <span id="lineCount" class="text-[10px] text-slate-500">0 chars</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-3 shrink-0 pb-2">
+                        <button onclick="app.processScript()" id="parseBtn" class="flex-1 py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold text-xs lg:text-sm rounded-2xl shadow-lg shadow-indigo-600/30 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-brain" id="parseIcon"></i>
+                            <span id="parseText">Analyze & Classify Script</span>
+                        </button>
+                        <button onclick="app.loadSampleScript()" class="px-4 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs rounded-2xl border border-slate-700 transition flex items-center space-x-2" title="Generate Sample Script">
+                            <i class="fa-solid fa-bolt text-amber-400"></i>
+                            <span>Sample</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT COLUMN: STORYBOARD & LIVE CANVAS -->
+            <section class="w-full md:w-1/2 flex flex-col bg-slate-950 overflow-hidden relative">
+                <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900 shrink-0">
+                    <div class="flex items-center space-x-3">
+                        <h2 class="text-xs lg:text-sm font-semibold text-slate-300 flex items-center space-x-2">
+                            <i class="fa-solid fa-film text-indigo-400"></i>
+                            <span>2. Storyboard & Live Canvas FX</span>
+                        </h2>
+                        <span id="sceneCountBadge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-800 text-slate-400">0 Sections</span>
+                    </div>
+                    <div id="actionToolbar" class="hidden flex items-center space-x-2">
+                        <button onclick="app.downloadAsVideoFile()" class="px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold rounded-xl transition flex items-center space-x-1.5 shadow-lg shadow-emerald-600/20 border border-emerald-500/30" title="Export as playable PC video file (.webm)">
+                            <i class="fa-solid fa-video text-xs"></i>
+                            <span id="downloadVideoBtnText">Export Video (.webm)</span>
+                        </button>
+                        <button onclick="app.generateAllMedia()" class="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-bold rounded-xl transition flex items-center space-x-1.5 shadow-lg shadow-amber-500/20">
+                            <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+                            <span id="genAllTopText">Generate All</span>
+                        </button>
+                        <button onclick="app.toggleBottomTheater()" class="px-3 py-1.5 bg-violet-600 hover:bg-violet-500 text-white text-xs font-medium rounded-xl transition flex items-center space-x-1.5 shadow-lg shadow-violet-600/25">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Theater</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FX Selector Bar -->
+                <div class="bg-slate-900 border-b border-slate-800 p-3 flex items-center justify-between shrink-0 overflow-x-auto custom-scrollbar">
+                    <span class="text-xs font-semibold text-slate-400 flex items-center space-x-1.5 whitespace-nowrap mr-3">
+                        <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
+                        <span>Canvas FX:</span>
+                    </span>
+                    <div class="flex items-center space-x-3 w-full justify-between">
+                        <div class="flex items-center space-x-2 overflow-x-auto" id="fxBar">
+                            <button onclick="app.setCanvasFx('particles', this)" class="fx-btn shrink-0 px-3 py-1.5 rounded-xl border border-indigo-500 bg-indigo-500/20 text-indigo-300 text-xs font-medium transition flex items-center space-x-1.5 shadow-sm">
+                                <i class="fa-solid fa-snowflake"></i><span>Particles</span>
+                            </button>
+                            <button onclick="app.setCanvasFx('cinematic', this)" class="fx-btn shrink-0 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-medium transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-camera-retro"></i><span>Zoom</span>
+                            </button>
+                            <button onclick="app.setCanvasFx('glitch', this)" class="fx-btn shrink-0 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-medium transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-bolt"></i><span>Glitch</span>
+                            </button>
+                            <button onclick="app.setCanvasFx('fire', this)" class="fx-btn shrink-0 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-medium transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-fire"></i><span>Fire</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center space-x-2 shrink-0 bg-slate-950 px-2.5 py-1 rounded-xl border border-slate-800">
+                            <label class="text-[10px] font-semibold text-slate-400 uppercase">Speed:</label>
+                            <input type="range" id="animSpeedRange" min="0.5" max="2.5" step="0.25" value="1.0" oninput="app.updateAnimSpeed(this.value)" class="w-16 accent-indigo-500 cursor-pointer">
+                            <span id="animSpeedVal" class="text-[10px] font-mono text-indigo-300 w-7 text-right">1.0x</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Storyboard Feed -->
+                <div id="storyboardContainer" class="flex-1 p-6 lg:p-8 overflow-y-auto custom-scrollbar space-y-8">
+                    <div class="h-full flex flex-col items-center justify-center text-center p-12 text-slate-500">
+                        <div class="w-20 h-20 rounded-3xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 mb-4 text-3xl shadow-2xl">
+                            <i class="fa-solid fa-clapperboard"></i>
+                        </div>
+                        <p class="text-sm font-medium text-slate-300">No script parsed yet</p>
+                        <p class="text-xs text-slate-500 max-w-xs mt-2 leading-relaxed">Select section count, enter your script on the left, and click Analyze to generate storyboards.</p>
+                    </div>
+                </div>
+
+                <!-- Bottom Theater Box -->
+                <div id="bottomTheaterBox" class="absolute bottom-4 right-4 z-40 bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-3xl p-4 shadow-2xl transition-all duration-300 w-80 md:w-96 flex flex-col space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 rounded-full bg-violet-500 animate-pulse"></div>
+                            <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center space-x-1.5">
+                                <i class="fa-solid fa-tv text-violet-400"></i>
+                                <span>Live Canvas Theater</span>
+                            </h3>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <span id="theaterStatus" class="text-[10px] text-slate-400 font-mono">Ready</span>
+                            <button onclick="app.downloadAsVideoFile()" class="text-emerald-400 hover:text-white text-[10px] px-2 py-0.5 bg-emerald-600/20 rounded border border-emerald-500/30 transition shadow-sm flex items-center space-x-1" title="Download Movie Video File">
+                                <i class="fa-solid fa-video"></i>
+                                <span>Export</span>
+                            </button>
+                            <button onclick="app.toggleTheaterMinimize()" id="minimizeTheaterBtn" class="text-slate-400 hover:text-white text-[10px] px-1.5 py-1 bg-slate-800 rounded border border-slate-700 transition flex items-center space-x-1" title="Minimize / Expand Theater">
+                                <i id="minimizeIcon" class="fa-solid fa-minus"></i>
+                                <span id="minimizeTheaterText" class="text-[9px] font-medium hidden">Expand</span>
+                            </button>
+                            <button onclick="app.toggleTheaterExpand()" id="expandTheaterBtn" class="text-slate-400 hover:text-white text-[10px] p-1 bg-slate-800 rounded border border-slate-700 transition">
+                                <i id="expandIcon" class="fa-solid fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="theaterBodyContent" class="flex flex-col space-y-2">
+                        <div id="theaterScreen" class="w-full aspect-video bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center relative overflow-hidden shadow-inner cursor-pointer" onclick="app.toggleTheaterExpand()">
+                            <div class="text-center text-slate-500 p-2 z-10">
+                                <i class="fa-solid fa-film text-sm mb-1 text-slate-600"></i>
+                                <p class="text-[10px] font-medium text-slate-400">Click to expand live canvas</p>
+                            </div>
+                        </div>
+
+                        <div id="theaterCaption" class="bg-slate-950/90 border border-slate-800/80 rounded-lg p-2 text-center text-[10px] text-slate-300 font-mono min-h-[30px] flex items-center justify-center line-clamp-2">
+                            Waiting for script sections...
+                        </div>
+
+                        <div class="flex items-center justify-between pt-1">
+                            <span id="theaterSceneIndicator" class="text-[10px] text-slate-400 font-medium">0 / 0</span>
+                            <div class="flex items-center space-x-1">
+                                <button onclick="app.theaterPrev()" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-lg transition" title="Previous"><i class="fa-solid fa-backward-step"></i></button>
+                                <button id="theaterPlayBtn" onclick="app.toggleTheaterPlay()" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-md transition flex items-center space-x-1"><i class="fa-solid fa-play"></i><span>Play FX</span></button>
+                                <button onclick="app.theaterNext()" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-lg transition" title="Next"><i class="fa-solid fa-forward-step"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Tray -->
+                <div class="border-t border-slate-800 bg-slate-950 p-3 shrink-0 flex flex-col space-y-2 transition-all duration-300" id="timelineSection">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-300 flex items-center space-x-1.5">
+                            <i class="fa-solid fa-timeline text-indigo-400"></i>
+                            <span>Collected Timeline Sequence</span>
+                        </span>
+                        <div class="flex items-center space-x-3">
+                            <span id="timelineCount" class="text-[11px] text-slate-400">0 items</span>
+                            <button onclick="app.toggleTimelineMinimize()" id="minimizeTimelineBtn" class="text-slate-400 hover:text-slate-200 text-xs px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg border border-slate-800 transition flex items-center space-x-1.5" title="Minimize / Expand Timeline">
+                                <i id="minimizeTimelineIcon" class="fa-solid fa-chevron-down text-[10px]"></i>
+                                <span id="minimizeTimelineText" class="text-[10px] font-medium">Minimize</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="bottomTimelineTray" class="flex space-x-3 overflow-x-auto custom-scrollbar pb-1 min-h-[75px] items-center transition-all duration-300">
+                        <div class="text-xs text-slate-500 italic px-2">Generated items will appear here...</div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+
+    <!-- API Key Modal -->
+    <div id="apiKeyModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center hidden p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-md w-full flex flex-col space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-bold text-slate-200 flex items-center space-x-2">
+                    <i class="fa-solid fa-key text-amber-400"></i>
+                    <span>Gemini API Key Settings (Optional)</span>
+                </h3>
+                <button onclick="app.closeApiKeyModal()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                Provide your Gemini API key to enable direct Gemini image and voiceover generation. If omitted, ScriptToVisual Pro operates seamlessly using Pollinations AI rendering and Web Speech TTS.
+            </p>
+            <input type="password" id="apiKeyInput" placeholder="AIzaSy..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500">
+            <div class="flex justify-end space-x-2 pt-2">
+                <button onclick="app.saveApiKey()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl transition">Save Key</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class LiveCanvasEngine {
+            constructor(canvasElem, imageUrl, fxType = 'particles', motionMode = 'auto-zoom', animSpeed = 1.0) {
+                this.canvas = canvasElem;
+                if (!this.canvas) return;
+                this.ctx = canvasElem.getContext('2d');
+                this.imageUrl = imageUrl;
+                this.fxType = fxType;
+                this.motionMode = motionMode;
+                this.animSpeed = animSpeed;
+                this.img = new Image();
+                this.imgLoaded = false;
+                this.particles = [];
+                this.animId = null;
+                this.time = 0;
+                this.autoZoomScale = 1.0;
+                this.panOffset = 0;
+                
+                this.init();
+            }
+
+            init() {
+                if (!this.canvas || !this.ctx) return;
+                this.img.crossOrigin = "anonymous";
+                this.img.onload = () => {
+                    this.imgLoaded = true;
+                    this.setupParticles();
+                    this.start();
+                };
+                this.img.onerror = () => {
+                    this.imgLoaded = false;
+                    this.setupParticles();
+                    this.start();
+                };
+                this.img.src = this.imageUrl;
+            }
+
+            setupParticles() {
+                if (!this.canvas) return;
+                this.particles = [];
+                const count = this.fxType === 'fire' ? 60 : 80;
+                for (let i = 0; i < count; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * (this.fxType === 'fire' ? 0.5 : 1.2),
+                        vy: this.fxType === 'fire' ? -1.5 - Math.random() * 2 : (Math.random() - 0.5) * 1.2 - 0.5,
+                        size: Math.random() * (this.fxType === 'fire' ? 4 : 2.5) + 1,
+                        alpha: Math.random() * 0.7 + 0.3,
+                        color: this.getParticleColor()
+                    });
+                }
+            }
+
+            getParticleColor() {
+                if (this.fxType === 'fire') {
+                    const colors = ['#f97316', '#ef4444', '#eab308', '#f59e0b'];
+                    return colors[Math.floor(Math.random() * colors.length)];
+                } else if (this.fxType === 'glitch') {
+                    const colors = ['#06b6d4', '#ec4899', '#3b82f6', '#10b981'];
+                    return colors[Math.floor(Math.random() * colors.length)];
+                } else {
+                    return '#ffffff';
+                }
+            }
+
+            start() {
+                if (this.animId) cancelAnimationFrame(this.animId);
+                const render = () => {
+                    this.time += 0.01 * this.animSpeed;
+
+                    if (this.motionMode === 'auto-zoom') {
+                        this.autoZoomScale = 1.15 + Math.sin(this.time * 0.6) * 0.15;
+                        this.panOffset = Math.sin(this.time * 0.4) * 35;
+                    } else if (this.motionMode === 'auto-zoom-in') {
+                        this.autoZoomScale += 0.0008 * this.animSpeed;
+                        if (this.autoZoomScale > 1.35) this.autoZoomScale = 1.0;
+                    } else if (this.motionMode === 'auto-zoom-out') {
+                        this.autoZoomScale -= 0.0008 * this.animSpeed;
+                        if (this.autoZoomScale < 1.0) this.autoZoomScale = 1.35;
+                    } else if (this.motionMode === 'move-left') {
+                        this.panOffset -= 0.25 * this.animSpeed;
+                        if (this.panOffset < -80) this.panOffset = 80;
+                    } else if (this.motionMode === 'move-right') {
+                        this.panOffset += 0.25 * this.animSpeed;
+                        if (this.panOffset > 80) this.panOffset = -80;
+                    } else if (this.motionMode === 'none') {
+                        this.autoZoomScale = 1.0;
+                        this.panOffset = 0;
+                    }
+
+                    this.draw();
+                    this.animId = requestAnimationFrame(render);
+                };
+                render();
+            }
+
+            draw() {
+                if (!this.ctx) return;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+
+                this.ctx.clearRect(0, 0, w, h);
+
+                if (this.imgLoaded) {
+                    const scale = (this.motionMode.includes('zoom') || this.motionMode === 'auto-zoom') ? this.autoZoomScale : 1.1;
+                    const dx = (w - w * scale) / 2 + this.panOffset;
+                    const dy = (h - h * scale) / 2;
+                    this.ctx.drawImage(this.img, dx, dy, w * scale, h * scale);
+
+                    if (this.fxType === 'glitch' && Math.random() < (0.08 * this.animSpeed)) {
+                        const offsetX = (Math.random() - 0.5) * 14;
+                        this.ctx.drawImage(this.img, offsetX + this.panOffset, 0, w, h);
+                        this.ctx.fillStyle = 'rgba(236, 72, 153, 0.15)';
+                        this.ctx.fillRect(0, Math.random() * h, w, Math.random() * 30);
+                    }
+                } else {
+                    this.ctx.fillStyle = '#090d16';
+                    this.ctx.fillRect(0, 0, w, h);
+                }
+
+                if (this.fxType === 'particles' || this.fxType === 'fire' || this.fxType === 'glitch') {
+                    this.ctx.save();
+                    for (let p of this.particles) {
+                        p.x += p.vx * this.animSpeed;
+                        p.y += p.vy * this.animSpeed;
+
+                        if (p.x < 0) p.x = w;
+                        if (p.x > w) p.x = 0;
+                        if (p.y < 0) {
+                            p.y = h;
+                            p.x = Math.random() * w;
+                        }
+                        if (p.y > h) p.y = 0;
+
+                        this.ctx.globalAlpha = p.alpha;
+                        this.ctx.fillStyle = p.color;
+                        this.ctx.beginPath();
+                        this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        this.ctx.fill();
+                    }
+                    this.ctx.restore();
+                }
+
+                const gradient = this.ctx.createRadialGradient(w/2, h/2, h/3, w/2, h/2, h);
+                gradient.addColorStop(0, 'rgba(0,0,0,0)');
+                gradient.addColorStop(1, 'rgba(3, 7, 18, 0.6)');
+                this.ctx.fillStyle = gradient;
+                this.ctx.fillRect(0, 0, w, h);
+            }
+        }
+
+        class ScriptToVisualApp {
+            constructor() {
+                this.apiKey = localStorage.getItem('script_visual_gemini_key') || "";
+                this.scenes = [];
+                this.isTheaterPlaying = false;
+                this.currentTheaterIndex = 0;
+                this.theaterTimer = null;
+                this.currentAudioElement = null;
+                this.currentGlobalStyle = "anime style, cel shaded, vibrant digital art";
+                this.currentCanvasFx = "particles";
+                this.animationSpeed = 1.0;
+                this.isTheaterExpanded = false;
+                this.isTheaterMinimized = false;
+                this.isTimelineMinimized = false;
+                this.charReferenceBase64 = null;
+                this.canvasEngines = {};
+                this.sceneMotionModes = {};
+
+                this.updateApiKeyUI();
+            }
+
+            openApiKeyModal() {
+                document.getElementById('apiKeyInput').value = this.apiKey;
+                document.getElementById('apiKeyModal').classList.remove('hidden');
+            }
+
+            closeApiKeyModal() {
+                document.getElementById('apiKeyModal').classList.add('hidden');
+            }
+
+            saveApiKey() {
+                this.apiKey = document.getElementById('apiKeyInput').value.trim();
+                localStorage.setItem('script_visual_gemini_key', this.apiKey);
+                this.updateApiKeyUI();
+                this.closeApiKeyModal();
+                this.showNotification("API Key saved!", "success");
+            }
+
+            updateApiKeyUI() {
+                const btnText = document.getElementById('apiKeyStatusText');
+                if (this.apiKey) {
+                    btnText.textContent = "Gemini Key Active";
+                    btnText.className = "text-emerald-400 font-semibold";
+                } else {
+                    btnText.textContent = "API Key (Optional)";
+                    btnText.className = "text-slate-300 font-normal";
+                }
+            }
+
+            showPage(pageId) {
+                const landing = document.getElementById('landingPage');
+                const studio = document.getElementById('studioPage');
+                if (!landing || !studio) return;
+                
+                if (pageId === 'landing') {
+                    landing.classList.remove('hidden');
+                    studio.classList.add('hidden');
+                } else if (pageId === 'studio') {
+                    landing.classList.add('hidden');
+                    studio.classList.remove('hidden');
+                }
+            }
+
+            loadSampleAndStudio() {
+                this.showPage('studio');
+                this.loadSampleScript();
+            }
+
+            updateArtStyle(val) {
+                this.currentGlobalStyle = val;
+                this.showNotification(`Art style set to ${val.split(',')[0]}`, "success");
+            }
+
+            updateAnimSpeed(val) {
+                this.animationSpeed = parseFloat(val);
+                document.getElementById('animSpeedVal').textContent = `${this.animationSpeed.toFixed(2)}x`;
+                Object.values(this.canvasEngines).forEach(engine => {
+                    engine.animSpeed = this.animationSpeed;
+                });
+            }
+
+            setSceneMotion(sceneId, mode, btnElem) {
+                this.sceneMotionModes[sceneId] = mode;
+                if (this.canvasEngines[sceneId]) {
+                    this.canvasEngines[sceneId].motionMode = mode;
+                }
+
+                const cardContainer = document.getElementById(`scene-card-${sceneId}`);
+                if (cardContainer) {
+                    cardContainer.querySelectorAll('.motion-btn').forEach(b => {
+                        b.className = "motion-btn px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 text-[10px] rounded-lg border border-slate-700 transition flex items-center space-x-1";
+                    });
+                }
+                if (btnElem) {
+                    btnElem.className = "motion-btn px-2 py-1 bg-indigo-600 text-white text-[10px] rounded-lg border border-indigo-500 transition flex items-center space-x-1 shadow-md shadow-indigo-600/30";
+                }
+            }
+
+            moveScene(index, direction) {
+                const targetIndex = index + direction;
+                if (targetIndex < 0 || targetIndex >= this.scenes.length) return;
+                const temp = this.scenes[index];
+                this.scenes[index] = this.scenes[targetIndex];
+                this.scenes[targetIndex] = temp;
+                
+                this.scenes.forEach((s, idx) => {
+                    s.sceneNumber = idx + 1;
+                });
+                
+                this.renderStoryboard();
+                this.showNotification("Section order updated", "success");
+            }
+
+            handleCharImageUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.charReferenceBase64 = e.target.result;
+                    const container = document.getElementById('charImagePreviewContainer');
+                    container.innerHTML = `<img src="${this.charReferenceBase64}" class="w-full h-full object-cover rounded-lg">`;
+                    this.showNotification("Character reference face loaded!", "success");
+                };
+                reader.readAsDataURL(file);
+            }
+
+            setCanvasFx(fxKey, btnElem) {
+                document.querySelectorAll('.fx-btn').forEach(btn => {
+                    btn.className = "fx-btn shrink-0 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-medium transition flex items-center space-x-1.5";
+                });
+                btnElem.className = "fx-btn shrink-0 px-3 py-1.5 rounded-xl border border-indigo-500 bg-indigo-500/20 text-indigo-300 text-xs font-medium transition flex items-center space-x-1.5 shadow-sm";
+                
+                this.currentCanvasFx = fxKey;
+                Object.values(this.canvasEngines).forEach(engine => {
+                    engine.fxType = fxKey;
+                    engine.setupParticles();
+                });
+                this.showNotification(`Canvas FX set to: ${fxKey}`, "success");
+            }
+
+            updateCharCount() {
+                const text = document.getElementById('scriptInput').value;
+                document.getElementById('lineCount').textContent = `${text.length} chars | ~${text.split('\n').filter(l=>l.trim()).length} lines`;
+            }
+
+            loadSampleScript() {
+                const sample = `INT. CYBERPUNK APARTMENT - NIGHT
+Hacker Alex sits in front of three glowing neon monitors, code scrolling rapidly across the holographic displays. "We are running out of time."
+
+EXT. CITY STREET - CONTINUOUS
+Sleek hover cars stream through neon-drenched canyons between giant megastructures as luminous rain begins to fall.
+
+INT. ANCIENT LAB - LATER
+A mysterious glowing blue artifact rests suspended on a magnetic pedestal in the center of the silent room. "It holds the key to everything."`;
+                document.getElementById('scriptInput').value = sample;
+                document.getElementById('manualSceneCount').value = "3";
+                this.updateCharCount();
+                this.processScript();
+            }
+
+            async processScript() {
+                const text = document.getElementById('scriptInput').value.trim();
+                if (!text) {
+                    this.showNotification("Please enter or load a script first.", "error");
+                    return;
+                }
+
+                const targetCount = parseInt(document.getElementById('manualSceneCount').value, 10) || 3;
+                const parseBtn = document.getElementById('parseBtn');
+                const parseIcon = document.getElementById('parseIcon');
+                const parseText = document.getElementById('parseText');
+                
+                parseBtn.disabled = true;
+                if (parseIcon) parseIcon.setAttribute('class', 'fa-solid fa-circle-notch animate-spin text-indigo-300');
+                if (parseText) parseText.textContent = `Classifying into ${targetCount} Sections...`;
+
+                let parsedSections = null;
+
+                if (this.apiKey) {
+                    try {
+                        const systemPrompt = `You are an expert script breakdown artist. Parse and distribute the script into EXACTLY ${targetCount} distinct chronological sections. Return a JSON array of exactly ${targetCount} objects with keys: 'sceneNumber' (number from 1 to ${targetCount}), 'heading' (string, descriptive title or scene header without 'Scene X'), 'actionText' (string), 'settingMood' (string), and 'imagePrompt' (string prompt for image generation).`;
+                        
+                        const payload = {
+                            contents: [{ role: "user", parts: [{ text: `Parse this script into exactly ${targetCount} sections:\n\n${text}` }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] },
+                            generationConfig: {
+                                responseMimeType: "application/json",
+                                responseSchema: {
+                                    type: "ARRAY",
+                                    items: {
+                                        type: "OBJECT",
+                                        properties: {
+                                            sceneNumber: { type: "INTEGER" },
+                                            heading: { type: "STRING" },
+                                            actionText: { type: "STRING" },
+                                            settingMood: { type: "STRING" },
+                                            imagePrompt: { type: "STRING" }
+                                        },
+                                        propertyOrdering: ["sceneNumber", "heading", "actionText", "settingMood", "imagePrompt"]
+                                    }
+                                }
+                            }
+                        };
+
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${this.apiKey}`;
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        const result = await response.json();
+                        const rawText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (rawText) {
+                            parsedSections = JSON.parse(rawText);
+                        }
+                    } catch (e) {
+                        console.warn("Gemini script parse fallback to NLP engine:", e);
+                    }
+                }
+
+                if (!parsedSections || !Array.isArray(parsedSections) || parsedSections.length === 0) {
+                    parsedSections = this.localSmartScriptParser(text, targetCount);
+                }
+
+                this.canvasEngines = {};
+                this.scenes = parsedSections.slice(0, targetCount).map((s, idx) => {
+                    let cleanHeading = (s.heading || `SECTION ${idx + 1}`).replace(/^scene\s*\d+\s*[-:]*\s*/i, '');
+                    return {
+                        id: idx + 1,
+                        sceneNumber: s.sceneNumber || (idx + 1),
+                        heading: cleanHeading,
+                        actionText: s.actionText || '',
+                        settingMood: s.settingMood || 'Dramatic',
+                        imagePrompt: s.imagePrompt || `${cleanHeading}, ${s.actionText || ''}`,
+                        imageUrl: null,
+                        audioUrl: null,
+                        status: 'idle'
+                    };
+                });
+
+                this.scenes.forEach(scene => {
+                    if (!this.sceneMotionModes[scene.id]) {
+                        this.sceneMotionModes[scene.id] = 'auto-zoom';
+                    }
+                });
+
+                this.renderStoryboard();
+                document.getElementById('actionToolbar').classList.remove('hidden');
+                document.getElementById('sceneCountBadge').textContent = `${this.scenes.length} Sections`;
+                this.showNotification(`Structured script into ${this.scenes.length} sections!`, "success");
+                this.renderTheaterFrame();
+
+                parseBtn.disabled = false;
+                if (parseIcon) parseIcon.setAttribute('class', 'fa-solid fa-brain');
+                if (parseText) parseText.textContent = "Analyze & Classify Script";
+            }
+
+            localSmartScriptParser(text, targetCount) {
+                const rawBlocks = text.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+                let textChunks = [];
+
+                if (rawBlocks.length >= targetCount) {
+                    const chunkSize = Math.ceil(rawBlocks.length / targetCount);
+                    for (let i = 0; i < targetCount; i++) {
+                        const chunk = rawBlocks.slice(i * chunkSize, (i + 1) * chunkSize).join(' ');
+                        textChunks.push(chunk || rawBlocks[rawBlocks.length - 1] || text);
+                    }
+                } else {
+                    const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+                    const perChunk = Math.max(1, Math.floor(sentences.length / targetCount));
+                    for (let i = 0; i < targetCount; i++) {
+                        let chunk = sentences.slice(i * perChunk, i === targetCount - 1 ? sentences.length : (i + 1) * perChunk).join(' ');
+                        textChunks.push(chunk || text);
+                    }
+                }
+
+                return textChunks.map((chunk, idx) => {
+                    const lines = chunk.split('\n').map(l => l.trim()).filter(Boolean);
+                    let heading = `SECTION ${idx + 1}`;
+                    let action = chunk;
+
+                    if (lines[0] && (lines[0].startsWith('INT.') || lines[0].startsWith('EXT.') || lines[0].length < 40)) {
+                        heading = lines[0];
+                        action = lines.slice(1).join(' ') || lines[0];
+                    }
+
+                    const charDesc = document.getElementById('charPhysicalDesc').value.trim();
+                    const promptText = `${heading}: ${action}. ${charDesc ? 'Character: ' + charDesc : ''} cinematic composition, detailed environment`;
+
+                    return {
+                        sceneNumber: idx + 1,
+                        heading: heading,
+                        actionText: action,
+                        settingMood: "Cinematic",
+                        imagePrompt: promptText
+                    };
+                });
+            }
+
+            renderStoryboard() {
+                const container = document.getElementById('storyboardContainer');
+                if (this.scenes.length === 0) {
+                    container.innerHTML = `
+                        <div class="h-full flex flex-col items-center justify-center text-center p-12 text-slate-500">
+                            <div class="w-20 h-20 rounded-3xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 mb-4 text-3xl shadow-2xl">
+                                <i class="fa-solid fa-clapperboard"></i>
+                            </div>
+                            <p class="text-sm font-medium text-slate-300">No script parsed yet</p>
+                        </div>
+                    `;
+                    this.renderTimelineTray();
+                    return;
+                }
+
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 gap-8 pb-16 max-w-3xl mx-auto w-full">
+                    ${this.scenes.map((scene, idx) => {
+                        const currentMode = this.sceneMotionModes[scene.id] || 'auto-zoom';
+                        return `
+                        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col space-y-5 transition hover:border-slate-700 shadow-2xl" id="scene-card-${scene.id}">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-3 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-xl text-xs font-bold">
+                                        Part #${scene.sceneNumber}
+                                    </span>
+                                    <span class="text-xs lg:text-sm font-bold text-slate-200 tracking-wide truncate max-w-[280px]">${escapeHtml(scene.heading)}</span>
+                                </div>
+                            </div>
+
+                            <div id="img-container-${scene.id}" class="w-full aspect-video rounded-2xl overflow-hidden bg-slate-950 flex items-center justify-center relative shadow-inner group border border-slate-800">
+                                ${scene.imageUrl ? `
+                                    <canvas id="canvas-${scene.id}" width="800" height="450" class="w-full h-full object-cover"></canvas>
+                                ` : `
+                                    <div class="text-center p-8 text-slate-600 flex flex-col items-center">
+                                        <i class="fa-regular fa-image text-4xl mb-2 text-slate-600"></i>
+                                        <p class="text-xs font-medium text-slate-500">No Visual Generated Yet</p>
+                                        <button onclick="app.generateSingleMedia(${scene.id})" class="mt-3 px-4 py-2 bg-indigo-600/80 hover:bg-indigo-600 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1.5 shadow-md">
+                                            <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+                                            <span>Generate Image Now</span>
+                                        </button>
+                                    </div>
+                                `}
+                                ${scene.imageUrl ? `
+                                <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-md border border-indigo-500/30 px-3 py-1.5 rounded-xl text-[10px] text-indigo-300 font-medium flex items-center space-x-2 shadow-lg pointer-events-none">
+                                    <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                                    <span>Live FX Active</span>
+                                </div>
+                                ` : ''}
+                            </div>
+
+                            <div class="flex items-center justify-between px-2 py-1 bg-slate-950/40 rounded-xl border border-slate-800/60">
+                                <span class="text-[10px] text-slate-400 font-medium">Reorder Section:</span>
+                                <div class="flex items-center space-x-1.5">
+                                    <button onclick="app.moveScene(${idx}, -1)" ${idx === 0 ? 'disabled class="opacity-30 cursor-not-allowed p-1.5 bg-slate-800 text-slate-400 text-xs rounded-lg border border-slate-700"' : 'class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-lg border border-slate-700 transition"'} title="Move Up">
+                                        <i class="fa-solid fa-arrow-up text-indigo-400 text-[10px]"></i>
+                                    </button>
+                                    <button onclick="app.moveScene(${idx}, 1)" ${idx === this.scenes.length - 1 ? 'disabled class="opacity-30 cursor-not-allowed p-1.5 bg-slate-800 text-slate-400 text-xs rounded-lg border border-slate-700"' : 'class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-lg border border-slate-700 transition"'} title="Move Down">
+                                        <i class="fa-solid fa-arrow-down text-indigo-400 text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-2.5 flex items-center justify-between overflow-x-auto custom-scrollbar gap-2">
+                                <span class="text-[11px] text-slate-400 font-semibold whitespace-nowrap mr-1">Motion:</span>
+                                <div class="flex items-center space-x-1.5">
+                                    <button onclick="app.setSceneMotion(${scene.id}, 'none', this)" class="motion-btn px-2 py-1 ${currentMode==='none'?'bg-indigo-600 text-white border-indigo-500 shadow-md':'bg-slate-800 hover:bg-slate-700 text-slate-400 border-slate-700'} text-[10px] rounded-lg border transition flex items-center space-x-1"><i class="fa-solid fa-ban"></i><span>Static</span></button>
+                                    <button onclick="app.setSceneMotion(${scene.id}, 'auto-zoom', this)" class="motion-btn px-2 py-1 ${currentMode==='auto-zoom'?'bg-indigo-600 text-white border-indigo-500 shadow-md':'bg-slate-800 hover:bg-slate-700 text-slate-400 border-slate-700'} text-[10px] rounded-lg border transition flex items-center space-x-1"><i class="fa-solid fa-expand"></i><span>Auto Zoom</span></button>
+                                    <button onclick="app.setSceneMotion(${scene.id}, 'auto-zoom-in', this)" class="motion-btn px-2 py-1 ${currentMode==='auto-zoom-in'?'bg-indigo-600 text-white border-indigo-500 shadow-md':'bg-slate-800 hover:bg-slate-700 text-slate-400 border-slate-700'} text-[10px] rounded-lg border transition flex items-center space-x-1"><i class="fa-solid fa-magnifying-glass-plus"></i><span>Zoom In</span></button>
+                                    <button onclick="app.setSceneMotion(${scene.id}, 'move-left', this)" class="motion-btn px-2 py-1 ${currentMode==='move-left'?'bg-indigo-600 text-white border-indigo-500 shadow-md':'bg-slate-800 hover:bg-slate-700 text-slate-400 border-slate-700'} text-[10px] rounded-lg border transition flex items-center space-x-1"><i class="fa-solid fa-arrow-left"></i><span>Pan Left</span></button>
+                                    <button onclick="app.setSceneMotion(${scene.id}, 'move-right', this)" class="motion-btn px-2 py-1 ${currentMode==='move-right'?'bg-indigo-600 text-white border-indigo-500 shadow-md':'bg-slate-800 hover:bg-slate-700 text-slate-400 border-slate-700'} text-[10px] rounded-lg border transition flex items-center space-x-1"><i class="fa-solid fa-arrow-right"></i><span>Pan Right</span></button>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col space-y-1.5">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Action & Dialogue:</label>
+                                <textarea id="action-input-${scene.id}" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono resize-none leading-relaxed" oninput="app.updateSceneText(${scene.id}, 'actionText', this.value)">${escapeHtml(scene.actionText)}</textarea>
+                            </div>
+
+                            <div class="flex flex-col space-y-1.5">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">AI Image Prompt:</label>
+                                <textarea id="prompt-input-${scene.id}" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-indigo-300 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono resize-none leading-relaxed" oninput="app.updateSceneText(${scene.id}, 'imagePrompt', this.value)">${escapeHtml(scene.imagePrompt)}</textarea>
+                            </div>
+
+                            <div id="audio-box-${scene.id}" class="pt-1">
+                                ${scene.audioUrl ? `
+                                    <div class="flex items-center justify-between bg-slate-950 border border-slate-800 rounded-xl p-3">
+                                        <div class="flex items-center space-x-3">
+                                            <button onclick="app.playSceneAudio(${scene.id})" class="w-9 h-9 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center transition shadow-md shadow-indigo-600/30">
+                                                <i class="fa-solid fa-volume-high text-xs"></i>
+                                            </button>
+                                            <div class="flex flex-col">
+                                                <span class="text-xs font-bold text-slate-200">Voiceover Audio Ready</span>
+                                                <span class="text-[10px] text-slate-400">TTS Audio track ready for timeline</span>
+                                            </div>
+                                        </div>
+                                        <button onclick="app.generateSingleAudio(${scene.id})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-xl border border-slate-700 transition">Regenerate Audio</button>
+                                    </div>
+                                ` : ''}
+                            </div>
+
+                            <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                                <button onclick="app.generateSingleMedia(${scene.id})" id="gen-btn-${scene.id}" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center space-x-2">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    <span>${scene.imageUrl ? 'Regenerate Section Visual' : 'Generate Section Visual'}</span>
+                                </button>
+                            </div>
+                        </div>
+                        `;
+                    }).join('')}
+                    </div>
+                `;
+
+                this.scenes.forEach(scene => {
+                    if (scene.imageUrl) {
+                        const canvasElem = document.getElementById(`canvas-${scene.id}`);
+                        if (canvasElem && !this.canvasEngines[scene.id]) {
+                            this.canvasEngines[scene.id] = new LiveCanvasEngine(canvasElem, scene.imageUrl, this.currentCanvasFx, this.sceneMotionModes[scene.id] || 'auto-zoom', this.animationSpeed);
+                        }
+                    }
+                });
+
+                this.renderTimelineTray();
+                this.renderTheaterFrame();
+            }
+
+            updateSceneText(sceneId, field, val) {
+                const scene = this.scenes.find(s => s.id === sceneId);
+                if (scene) {
+                    scene[field] = val;
+                }
+            }
+
+            async generateSingleMedia(sceneId) {
+                const scene = this.scenes.find(s => s.id === sceneId);
+                if (!scene) return;
+
+                const btn = document.getElementById(`gen-btn-${sceneId}`);
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i><span>Generating Image...</span>`;
+                }
+
+                try {
+                    const charDesc = document.getElementById('charPhysicalDesc').value.trim();
+                    const fullPrompt = `${this.currentGlobalStyle}, ${scene.imagePrompt} ${charDesc ? ', character features: ' + charDesc : ''}, high detail, 16:9 widescreen`;
+                    
+                    let imageBlobUrl = null;
+
+                    // Option A: Gemini Image API if key available
+                    if (this.apiKey) {
+                        try {
+                            const imagePayload = {
+                                contents: [{
+                                    role: 'user',
+                                    parts: [
+                                        ...(this.charReferenceBase64 ? [
+                                            { text: `Maintain character face consistency with this reference: ` },
+                                            { inlineData: { mimeType: 'image/png', data: this.charReferenceBase64.split(',')[1] } }
+                                        ] : []),
+                                        { text: `Generate image for scene: ${fullPrompt}` }
+                                    ]
+                                }],
+                                generationConfig: {
+                                    responseModalities: ['IMAGE'],
+                                    imageConfig: { aspectRatio: "16:9" }
+                                }
+                            };
+
+                            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=${this.apiKey}`;
+                            const imgRes = await fetch(apiUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(imagePayload)
+                            });
+                            const imgJson = await imgRes.json();
+                            const part = imgJson?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+                            if (part) {
+                                imageBlobUrl = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+                            }
+                        } catch (err) {
+                            console.warn("Gemini Image API error, moving to Pollinations AI:", err);
+                        }
+                    }
+
+                    // Option B: Pollinations AI Generation (High quality AI rendering engine, guaranteed working)
+                    if (!imageBlobUrl) {
+                        const seed = Math.floor(Math.random() * 999999);
+                        const cleanPrompt = encodeURIComponent(fullPrompt.substring(0, 300));
+                        const pollinationsUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=450&seed=${seed}&nologo=true`;
+                        
+                        // Verify image loads
+                        imageBlobUrl = await new Promise((resolve) => {
+                            const img = new Image();
+                            img.crossOrigin = "anonymous";
+                            img.onload = () => resolve(pollinationsUrl);
+                            img.onerror = () => resolve(null);
+                            img.src = pollinationsUrl;
+                        });
+                    }
+
+                    // Option C: Procedural Canvas fallback if offline
+                    if (!imageBlobUrl) {
+                        imageBlobUrl = this.createFallbackImage(scene.heading, scene.sceneNumber);
+                    }
+
+                    scene.imageUrl = imageBlobUrl;
+                    scene.status = 'ready';
+
+                    await this.generateSingleAudio(sceneId, false);
+                    this.renderStoryboard();
+                    this.showNotification(`Visual for Section #${scene.sceneNumber} generated!`, "success");
+                } catch (err) {
+                    console.error("Image generation error:", err);
+                    scene.imageUrl = this.createFallbackImage(scene.heading, scene.sceneNumber);
+                    scene.status = 'ready';
+                    await this.generateSingleAudio(sceneId, false);
+                    this.renderStoryboard();
+                    this.showNotification(`Section visual generated!`, "success");
+                } finally {
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i><span>Generate Section Visual</span>`;
+                    }
+                }
+            }
+
+            createFallbackImage(title, num) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 800;
+                canvas.height = 450;
+                const ctx = canvas.getContext('2d');
+
+                const gradient = ctx.createLinearGradient(0, 0, 800, 450);
+                gradient.addColorStop(0, '#0f172a');
+                gradient.addColorStop(0.5, '#1e1b4b');
+                gradient.addColorStop(1, '#312e81');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 800, 450);
+
+                ctx.fillStyle = 'rgba(99, 102, 241, 0.15)';
+                ctx.beginPath();
+                ctx.arc(400, 225, 180, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#818cf8';
+                ctx.font = 'bold 36px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(`SCENE #${num}`, 400, 180);
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = 'bold 22px Inter, sans-serif';
+                ctx.fillText(title.length > 40 ? title.substring(0, 37) + '...' : title, 400, 240);
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '14px Inter, sans-serif';
+                ctx.fillText('ScriptToVisual Pro • Visualizer', 400, 290);
+
+                return canvas.toDataURL('image/png');
+            }
+
+            async generateSingleAudio(sceneId, reRender = true) {
+                const scene = this.scenes.find(s => s.id === sceneId);
+                if (!scene) return;
+
+                const narrationText = `${scene.heading}. ${scene.actionText}`;
+
+                if (this.apiKey) {
+                    try {
+                        const voiceName = document.getElementById('voiceName').value || 'Kore';
+                        const ttsPayload = {
+                            contents: [{ parts: [{ text: `Read narration: ${narrationText}` }] }],
+                            generationConfig: {
+                                responseModalities: ["AUDIO"],
+                                speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voiceName } } }
+                            }
+                        };
+                        const ttsUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${this.apiKey}`;
+                        const ttsRes = await fetch(ttsUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(ttsPayload)
+                        });
+                        const ttsJson = await ttsRes.json();
+                        const ttsPart = ttsJson?.candidates?.[0]?.content?.parts?.[0];
+                        if (ttsPart?.inlineData?.data) {
+                            const pcmData = this.base64ToArrayBuffer(ttsPart.inlineData.data);
+                            const wavBlob = this.pcmToWav(new Int16Array(pcmData), 24000);
+                            scene.audioUrl = URL.createObjectURL(wavBlob);
+                            if (reRender) this.renderStoryboard();
+                            return;
+                        }
+                    } catch (e) {
+                        console.warn("Gemini TTS fallback to Web Speech API:", e);
+                    }
+                }
+
+                // Native Web Speech API fallback
+                scene.audioUrl = 'web-speech:' + encodeURIComponent(narrationText);
+                if (reRender) this.renderStoryboard();
+            }
+
+            base64ToArrayBuffer(base64) {
+                const binaryString = atob(base64);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                return bytes.buffer;
+            }
+
+            pcmToWav(pcm16, sampleRate) {
+                const numChannels = 1;
+                const byteRate = sampleRate * numChannels * 2;
+                const blockAlign = numChannels * 2;
+                const dataSize = pcm16.length * 2;
+                const chunkSize = 36 + dataSize;
+
+                const buffer = new ArrayBuffer(44 + dataSize);
+                const view = new DataView(buffer);
+
+                let offset = 0;
+                function writeString(str) {
+                    for (let i = 0; i < str.length; i++) view.setUint8(offset++, str.charCodeAt(i));
+                }
+
+                writeString('RIFF');
+                view.setUint32(offset, chunkSize, true); offset += 4;
+                writeString('WAVE');
+                writeString('fmt ');
+                view.setUint32(offset, 16, true); offset += 4;
+                view.setUint16(offset, 1, true); offset += 2;
+                view.setUint16(offset, numChannels, true); offset += 2;
+                view.setUint32(offset, sampleRate, true); offset += 4;
+                view.setUint32(offset, byteRate, true); offset += 4;
+                view.setUint16(offset, blockAlign, true); offset += 2;
+                view.setUint16(offset, 16, true); offset += 2;
+                writeString('data');
+                view.setUint32(offset, dataSize, true); offset += 4;
+
+                for (let i = 0; i < pcm16.length; i++, offset += 2) {
+                    view.setInt16(offset, pcm16[i], true);
+                }
+                return new Blob([view], { type: 'audio/wav' });
+            }
+
+            playSceneAudio(sceneId) {
+                const scene = this.scenes.find(s => s.id === sceneId);
+                if (!scene || !scene.audioUrl) return;
+
+                if (this.currentAudioElement) {
+                    this.currentAudioElement.pause();
+                }
+
+                if (scene.audioUrl.startsWith('web-speech:')) {
+                    if ('speechSynthesis' in window) {
+                        window.speechSynthesis.cancel();
+                        const text = decodeURIComponent(scene.audioUrl.replace('web-speech:', ''));
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        window.speechSynthesis.speak(utterance);
+                    }
+                } else {
+                    this.currentAudioElement = new Audio(scene.audioUrl);
+                    this.currentAudioElement.play().catch(e => console.log(e));
+                }
+            }
+
+            async generateAllMedia() {
+                const topBtnText = document.getElementById('genAllTopText');
+                if (topBtnText) topBtnText.textContent = "Generating...";
+
+                for (let scene of this.scenes) {
+                    if (!scene.imageUrl) {
+                        await this.generateSingleMedia(scene.id);
+                    }
+                }
+
+                if (topBtnText) topBtnText.textContent = "Generate All";
+                this.showNotification("All section media generated successfully!", "success");
+            }
+
+            renderTimelineTray() {
+                const tray = document.getElementById('bottomTimelineTray');
+                const countBadge = document.getElementById('timelineCount');
+                const generated = this.scenes.filter(s => s.imageUrl);
+
+                countBadge.textContent = `${generated.length} / ${this.scenes.length} generated`;
+
+                if (generated.length === 0) {
+                    tray.innerHTML = `<div class="text-xs text-slate-500 italic px-2">Generated items will appear here...</div>`;
+                    return;
+                }
+
+                tray.innerHTML = generated.map(scene => `
+                    <div class="shrink-0 w-28 aspect-video bg-slate-900 border border-slate-800 rounded-xl overflow-hidden relative group cursor-pointer shadow-md">
+                        <img src="${scene.imageUrl}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center p-1 text-center">
+                            <span class="text-[9px] font-bold text-white">Part #${scene.sceneNumber}</span>
+                            <span class="text-[8px] text-indigo-300 truncate w-full">${escapeHtml(scene.heading)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderTheaterFrame() {
+                const screen = document.getElementById('theaterScreen');
+                const caption = document.getElementById('theaterCaption');
+                const indicator = document.getElementById('theaterSceneIndicator');
+
+                if (this.scenes.length === 0) {
+                    screen.innerHTML = `
+                        <div class="text-center text-slate-500 p-2 z-10">
+                            <i class="fa-solid fa-film text-sm mb-1 text-slate-600"></i>
+                            <p class="text-[10px] font-medium text-slate-400">No script parsed yet</p>
+                        </div>
+                    `;
+                    caption.textContent = "Waiting for script sections...";
+                    indicator.textContent = "0 / 0";
+                    return;
+                }
+
+                const scene = this.scenes[this.currentTheaterIndex] || this.scenes[0];
+                indicator.textContent = `${this.currentTheaterIndex + 1} / ${this.scenes.length}`;
+                caption.textContent = scene.actionText || scene.heading;
+
+                if (scene.imageUrl) {
+                    screen.innerHTML = `
+                        <canvas id="theaterCanvas" width="800" height="450" class="w-full h-full object-cover"></canvas>
+                        <div class="absolute bottom-2 left-2 bg-slate-900/80 px-2 py-0.5 rounded text-[9px] text-indigo-300 font-mono">
+                            ${escapeHtml(scene.heading)}
+                        </div>
+                    `;
+                    const canvasElem = document.getElementById('theaterCanvas');
+                    if (canvasElem) {
+                        new LiveCanvasEngine(canvasElem, scene.imageUrl, this.currentCanvasFx, this.sceneMotionModes[scene.id] || 'auto-zoom', this.animationSpeed);
+                    }
+                } else {
+                    screen.innerHTML = `
+                        <div class="text-center text-slate-500 p-2 z-10">
+                            <i class="fa-regular fa-image text-xl mb-1 text-slate-600"></i>
+                            <p class="text-[10px] font-medium text-slate-400">${escapeHtml(scene.heading)} (Visual Pending)</p>
+                        </div>
+                    `;
+                }
+            }
+
+            toggleTheaterPlay() {
+                if (this.scenes.length === 0) return;
+                const btn = document.getElementById('theaterPlayBtn');
+                const status = document.getElementById('theaterStatus');
+
+                if (this.isTheaterPlaying) {
+                    this.isTheaterPlaying = false;
+                    if (this.theaterTimer) {
+                        clearTimeout(this.theaterTimer);
+                        this.theaterTimer = null;
+                    }
+                    if (this.currentAudioElement) this.currentAudioElement.pause();
+                    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+                    btn.innerHTML = `<i class="fa-solid fa-play"></i><span>Play FX</span>`;
+                    status.textContent = "Paused";
+                } else {
+                    this.isTheaterPlaying = true;
+                    btn.innerHTML = `<i class="fa-solid fa-pause"></i><span>Pause</span>`;
+                    status.textContent = "Playing";
+
+                    this.playCurrentTheaterSection();
+                }
+            }
+
+            playCurrentTheaterSection() {
+                if (!this.isTheaterPlaying) return;
+                const currentScene = this.scenes[this.currentTheaterIndex];
+                if (!currentScene) return;
+
+                this.renderTheaterFrame();
+
+                if (this.currentAudioElement) this.currentAudioElement.pause();
+                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+                if (currentScene.audioUrl) {
+                    if (currentScene.audioUrl.startsWith('web-speech:')) {
+                        const text = decodeURIComponent(currentScene.audioUrl.replace('web-speech:', ''));
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        utterance.onend = () => this.advanceTheaterToNext();
+                        utterance.onerror = () => this.advanceTheaterToNext();
+                        window.speechSynthesis.speak(utterance);
+                    } else {
+                        this.currentAudioElement = new Audio(currentScene.audioUrl);
+                        this.currentAudioElement.onended = () => this.advanceTheaterToNext();
+                        this.currentAudioElement.play().catch(e => {
+                            this.theaterTimer = setTimeout(() => this.advanceTheaterToNext(), 4000);
+                        });
+                    }
+                } else {
+                    this.theaterTimer = setTimeout(() => this.advanceTheaterToNext(), 4000);
+                }
+            }
+
+            advanceTheaterToNext() {
+                if (!this.isTheaterPlaying) return;
+                this.currentTheaterIndex++;
+                if (this.currentTheaterIndex >= this.scenes.length) {
+                    this.currentTheaterIndex = 0;
+                    this.toggleTheaterPlay();
+                    return;
+                }
+                this.playCurrentTheaterSection();
+            }
+
+            theaterNext() {
+                if (this.scenes.length === 0) return;
+                if (this.currentAudioElement) this.currentAudioElement.pause();
+                if (this.theaterTimer) clearTimeout(this.theaterTimer);
+                this.currentTheaterIndex = (this.currentTheaterIndex + 1) % this.scenes.length;
+                this.renderTheaterFrame();
+                if (this.isTheaterPlaying) this.playCurrentTheaterSection();
+            }
+
+            theaterPrev() {
+                if (this.scenes.length === 0) return;
+                if (this.currentAudioElement) this.currentAudioElement.pause();
+                if (this.theaterTimer) clearTimeout(this.theaterTimer);
+                this.currentTheaterIndex = (this.currentTheaterIndex - 1 + this.scenes.length) % this.scenes.length;
+                this.renderTheaterFrame();
+                if (this.isTheaterPlaying) this.playCurrentTheaterSection();
+            }
+
+            toggleTheaterExpand() {
+                const box = document.getElementById('bottomTheaterBox');
+                const icon = document.getElementById('expandIcon');
+                this.isTheaterExpanded = !this.isTheaterExpanded;
+
+                if (this.isTheaterExpanded) {
+                    box.className = "fixed inset-6 z-50 bg-slate-900/95 backdrop-blur-xl border border-indigo-500/40 rounded-3xl p-6 shadow-2xl transition-all duration-300 flex flex-col space-y-4 max-w-4xl mx-auto";
+                    document.getElementById('theaterScreen').className = "w-full flex-1 bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-center relative overflow-hidden shadow-inner cursor-pointer min-h-[350px]";
+                    icon.setAttribute('class', 'fa-solid fa-compress');
+                } else {
+                    box.className = "absolute bottom-4 right-4 z-40 bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-3xl p-4 shadow-2xl transition-all duration-300 w-80 md:w-96 flex flex-col space-y-3";
+                    document.getElementById('theaterScreen').className = "w-full aspect-video bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center relative overflow-hidden shadow-inner cursor-pointer";
+                    icon.setAttribute('class', 'fa-solid fa-expand');
+                }
+            }
+
+            toggleTheaterMinimize() {
+                const body = document.getElementById('theaterBodyContent');
+                const icon = document.getElementById('minimizeIcon');
+                const text = document.getElementById('minimizeTheaterText');
+                const box = document.getElementById('bottomTheaterBox');
+                this.isTheaterMinimized = !this.isTheaterMinimized;
+                
+                if (this.isTheaterMinimized) {
+                    body.classList.add('hidden');
+                    icon.setAttribute('class', 'fa-solid fa-plus');
+                    if (text) {
+                        text.classList.remove('hidden');
+                        text.textContent = "Expand";
+                    }
+                    box.classList.remove('w-80', 'md:w-96');
+                    box.classList.add('w-auto');
+                } else {
+                    body.classList.remove('hidden');
+                    icon.setAttribute('class', 'fa-solid fa-minus');
+                    if (text) {
+                        text.classList.add('hidden');
+                    }
+                    box.classList.remove('w-auto');
+                    box.classList.add('w-80', 'md:w-96');
+                }
+            }
+
+            toggleTimelineMinimize() {
+                const tray = document.getElementById('bottomTimelineTray');
+                const icon = document.getElementById('minimizeTimelineIcon');
+                const text = document.getElementById('minimizeTimelineText');
+                this.isTimelineMinimized = !this.isTimelineMinimized;
+
+                if (this.isTimelineMinimized) {
+                    tray.classList.add('hidden');
+                    icon.className = "fa-solid fa-chevron-up text-[10px]";
+                    text.textContent = "Expand";
+                } else {
+                    tray.classList.remove('hidden');
+                    icon.className = "fa-solid fa-chevron-down text-[10px]";
+                    text.textContent = "Minimize";
+                }
+            }
+
+            async downloadAsVideoFile() {
+                const generatedScenes = this.scenes.filter(s => s.imageUrl);
+                if (generatedScenes.length === 0) {
+                    this.showNotification("Please generate at least one visual first.", "error");
+                    return;
+                }
+
+                const btnText = document.getElementById('downloadVideoBtnText');
+                if (btnText) btnText.textContent = "Rendering Video...";
+                this.showNotification("Starting video recorder for export...", "success");
+
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 1280;
+                    canvas.height = 720;
+                    const ctx = canvas.getContext('2d');
+
+                    const canvasStream = canvas.captureStream(30);
+                    let mimeType = 'video/webm;codecs=vp9';
+                    if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/webm';
+
+                    const mediaRecorder = new MediaRecorder(canvasStream, { mimeType });
+                    const chunks = [];
+
+                    mediaRecorder.ondataavailable = (e) => {
+                        if (e.data && e.data.size > 0) chunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'video/webm' });
+                        const videoUrl = URL.createObjectURL(blob);
+                        const downloadAnchor = document.createElement('a');
+                        downloadAnchor.href = videoUrl;
+                        downloadAnchor.download = `ScriptToVisual_Movie_${Date.now()}.webm`;
+                        document.body.appendChild(downloadAnchor);
+                        downloadAnchor.click();
+                        downloadAnchor.remove();
+
+                        if (btnText) btnText.textContent = "Export Video (.webm)";
+                        this.showNotification("Video exported successfully!", "success");
+                    };
+
+                    mediaRecorder.start();
+
+                    let currentSceneIdx = 0;
+                    const renderNextSceneForVideo = async () => {
+                        if (currentSceneIdx >= generatedScenes.length) {
+                            setTimeout(() => mediaRecorder.stop(), 800);
+                            return;
+                        }
+
+                        const scene = generatedScenes[currentSceneIdx];
+                        currentSceneIdx++;
+
+                        const img = new Image();
+                        img.crossOrigin = "anonymous";
+                        await new Promise((resolve) => {
+                            img.onload = resolve;
+                            img.onerror = resolve;
+                            img.src = scene.imageUrl;
+                        });
+
+                        const sceneDurationMs = 4000;
+                        const startTime = performance.now();
+                        let zoomVal = 1.0;
+
+                        const frameInterval = setInterval(() => {
+                            const elapsed = performance.now() - startTime;
+                            if (elapsed >= sceneDurationMs) {
+                                clearInterval(frameInterval);
+                                renderNextSceneForVideo();
+                                return;
+                            }
+
+                            ctx.fillStyle = '#050811';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                            zoomVal += 0.0015;
+                            const w = canvas.width;
+                            const h = canvas.height;
+                            const scale = zoomVal;
+                            const dx = (w - w * scale) / 2;
+                            const dy = (h - h * scale) / 2;
+                            ctx.drawImage(img, dx, dy, w * scale, h * scale);
+
+                            ctx.fillStyle = 'rgba(3, 7, 18, 0.85)';
+                            ctx.fillRect(40, h - 110, w - 80, 80);
+                            ctx.strokeStyle = '#6366f1';
+                            ctx.lineWidth = 2;
+                            ctx.strokeRect(40, h - 110, w - 80, 80);
+
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = 'bold 22px Inter, sans-serif';
+                            ctx.fillText(`Part #${scene.sceneNumber}: ${scene.heading}`, 70, h - 70);
+
+                            ctx.fillStyle = '#cbd5e1';
+                            ctx.font = '16px Inter, sans-serif';
+                            const truncatedAction = (scene.actionText || '').substring(0, 90);
+                            ctx.fillText(truncatedAction, 70, h - 40);
+
+                        }, 1000 / 30);
+                    };
+
+                    renderNextSceneForVideo();
+
+                } catch (err) {
+                    console.error("Video export error:", err);
+                    if (btnText) btnText.textContent = "Export Video (.webm)";
+                    this.showNotification("Error exporting video file.", "error");
+                }
+            }
+
+            toggleBottomTheater() {
+                const box = document.getElementById('bottomTheaterBox');
+                box.classList.toggle('hidden');
+            }
+
+            showNotification(message, type = 'success') {
+                const div = document.createElement('div');
+                div.className = `fixed bottom-6 left-6 z-50 px-5 py-3 rounded-2xl text-xs font-semibold shadow-2xl backdrop-blur-md transition-all duration-300 flex items-center space-x-2.5 ${type === 'success' ? 'bg-emerald-600/90 text-white border border-emerald-500/30' : 'bg-rose-600/90 text-white border border-rose-500/30'}`;
+                div.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-triangle-exclamation'} text-sm"></i><span>${message}</span>`;
+                document.body.appendChild(div);
+                setTimeout(() => {
+                    div.style.opacity = '0';
+                    setTimeout(() => div.remove(), 300);
+                }, 3000);
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        // Initialize App on DOM Ready
+        window.onload = () => {
+            window.app = new ScriptToVisualApp();
+        };
+    </script>
+</body>
+</html>
